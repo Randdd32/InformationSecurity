@@ -17,6 +17,7 @@ SOURCES += \
     headers/services/cryptdbservice.cpp \
     headers/services/encryptedfilehandler.cpp \
     headers/utils/cryptoutils.cpp \
+    headers/utils/passwordvalidator.cpp \
     headers/views/useraccount.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
     src/services/cryptdbservice.cpp \
     src/services/encryptedfilehandler.cpp \
     src/utils/cryptoutils.cpp \
+    src/utils/passwordvalidator.cpp \
     src/views/mainwindow.cpp
 
 HEADERS += \
@@ -32,6 +34,7 @@ HEADERS += \
     headers/services/cryptdbservice.h \
     headers/services/encryptedfilehandler.h \
     headers/utils/cryptoutils.h \
+    headers/utils/passwordvalidator.h \
     headers/views/mainwindow.h \
     headers/views/useraccount.h \
     mainwindow.h
