@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QCryptographicHash>
+#include <QRandomGenerator>
 #include <QFile>
 
 #include <openssl/evp.h>
@@ -12,10 +13,22 @@ QString CryptoUtils::hashMD5(const QString &data)
     return hash.toHex();
 }
 
-QByteArray CryptoUtils::deriveKeyAndIV(const QString &passphrase)
+QByteArray CryptoUtils::deriveKey(const QString &passphrase)
 {
     QByteArray hash = QCryptographicHash::hash(passphrase.toUtf8(), QCryptographicHash::Md5);
-    return hash;
+    return hash.left(DES_KEY_SIZE);
+}
+
+QByteArray CryptoUtils::generateRandomIV()
+{
+    QByteArray iv(DES_IV_SIZE, 0);
+    QRandomGenerator *rand = QRandomGenerator::global();
+
+    for (int i = 0; i < DES_IV_SIZE; ++i) {
+        iv[i] = (char)rand->generate();
+    }
+
+    return iv;
 }
 
 QByteArray CryptoUtils::encryptDES_CBC(const QByteArray &plainData, const QByteArray &key, const QByteArray &iv)

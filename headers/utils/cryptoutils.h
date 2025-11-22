@@ -12,7 +12,9 @@ public:
 
     static QString hashMD5(const QString &data);
 
-    static QByteArray deriveKeyAndIV(const QString &passphrase);
+    static QByteArray deriveKey(const QString &passphrase);
+
+    static QByteArray generateRandomIV();
 
     static QByteArray encryptDES_CBC(const QByteArray &plainData, const QByteArray &key, const QByteArray &iv);
 

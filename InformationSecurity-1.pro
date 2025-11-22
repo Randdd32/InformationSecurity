@@ -14,17 +14,20 @@ LIBS += -lcrypto -lssl
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    headers/services/cryptdbservice.cpp \
     headers/utils/cryptoutils.cpp \
     headers/views/useraccount.cpp \
     main.cpp \
     mainwindow.cpp \
     src/main.cpp \
     src/models/useraccount.cpp \
+    src/services/cryptdbservice.cpp \
     src/utils/cryptoutils.cpp \
     src/views/mainwindow.cpp
 
 HEADERS += \
     headers/models/useraccount.h \
+    headers/services/cryptdbservice.h \
     headers/utils/cryptoutils.h \
     headers/views/mainwindow.h \
     headers/views/useraccount.h \
