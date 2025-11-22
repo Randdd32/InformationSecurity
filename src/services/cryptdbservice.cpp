@@ -150,7 +150,7 @@ bool CryptDBService::userExists(const QString& username)
 
     if (!query.exec()) {
         qCritical() << "User existence check failed: " << query.lastError().text();
-        return false;
+        throw DBException(query.lastError().text());
     }
     return query.next();
 }
@@ -239,7 +239,7 @@ QList<UserAccount> CryptDBService::getAllUsers()
     QSqlQuery query(_db);
     if (!query.exec("SELECT * FROM accounts")) {
         qCritical() << "Failed to get all users: " << query.lastError().text();
-        return users;
+        throw DBException(query.lastError().text());
     }
 
     while (query.next()) {

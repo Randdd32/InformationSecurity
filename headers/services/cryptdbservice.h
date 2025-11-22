@@ -5,7 +5,7 @@
 #include <QSqlDatabase>
 #include <QList>
 
-#include "headers/models/UserAccount.h"
+#include "headers/models/useraccount.h"
 #include "headers/services/encryptedfilehandler.h"
 
 class CryptDBService : public QObject
