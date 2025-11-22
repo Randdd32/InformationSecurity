@@ -8,8 +8,9 @@ class CryptDBService : public QObject
     Q_OBJECT
 public:
     explicit CryptDBService(QObject *parent = nullptr);
+    ~CryptDBService();
 
-signals:
+private:
 };
 
 #endif // CRYPTDBSERVICE_H

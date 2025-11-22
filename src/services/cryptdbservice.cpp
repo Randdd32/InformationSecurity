@@ -3,3 +3,6 @@
 CryptDBService::CryptDBService(QObject *parent)
     : QObject{parent}
 {}
+
+CryptDBService::~CryptDBService()
+{}

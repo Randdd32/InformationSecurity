@@ -1,6 +1,6 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets sql
 
 CONFIG += c++17
 
@@ -15,6 +15,7 @@ LIBS += -lcrypto -lssl
 
 SOURCES += \
     headers/services/cryptdbservice.cpp \
+    headers/services/encryptedfilehandler.cpp \
     headers/utils/cryptoutils.cpp \
     headers/views/useraccount.cpp \
     main.cpp \
@@ -22,12 +23,14 @@ SOURCES += \
     src/main.cpp \
     src/models/useraccount.cpp \
     src/services/cryptdbservice.cpp \
+    src/services/encryptedfilehandler.cpp \
     src/utils/cryptoutils.cpp \
     src/views/mainwindow.cpp
 
 HEADERS += \
     headers/models/useraccount.h \
     headers/services/cryptdbservice.h \
+    headers/services/encryptedfilehandler.h \
     headers/utils/cryptoutils.h \
     headers/views/mainwindow.h \
     headers/views/useraccount.h \
