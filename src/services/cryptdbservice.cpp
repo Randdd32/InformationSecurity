@@ -1,5 +1,6 @@
 #include "headers/services/cryptdbservice.h"
 #include "headers/utils/cryptoutils.h"
+#include "headers/utils/exceptions.h"
 
 #include <QFile>
 #include <QSqlError>
@@ -183,12 +184,12 @@ UserAccount CryptDBService::getUser(const QString& username)
 
     if (!query.exec()) {
         qCritical() << "Failed to get user: " << query.lastError().text();
-        return UserAccount();
+        throw DBException(query.lastError().text());
     }
 
     if (!query.next()) {
         qWarning() << "User not found by username: " << username;
-        return UserAccount();
+        throw UserNotFoundException(username);
     }
 
     QSqlRecord record = query.record();

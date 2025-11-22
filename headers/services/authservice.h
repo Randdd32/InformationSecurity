@@ -1,0 +1,40 @@
+#ifndef AUTHSERVICE_H
+#define AUTHSERVICE_H
+
+#include "headers/models/useraccount.h"
+#include "headers/services/cryptdbservice.h"
+
+#include <QObject>
+#include <QSharedPointer>
+
+enum class AuthStatus {
+    Success,
+    UserNotFound,
+    IncorrectPassword,
+    UserBlocked,
+    DatabaseError
+};
+
+class AuthService : public QObject
+{
+    Q_OBJECT
+public:
+    explicit AuthService(QSharedPointer<CryptDBService> dbService, QObject *parent = nullptr);
+
+    bool initDB(const QString& passphrase);
+    AuthStatus authenticate(const QString& username, const QString& password, UserAccount& accountOut);
+    bool changePassword(const QString& username, const QString& oldPassword, const QString& newPassword, QString& errorMessageOut);
+    bool saveAndCleanup();
+
+    int loginAttemptCount() const;
+    void resetLoginAttemptCount();
+    void incrementLoginAttemptCount();
+
+private:
+    QSharedPointer<CryptDBService> _dbService;
+    int _loginAttemptCount = 0;
+
+    bool validateNewPassword(const QString& username, const QString& newPassword, QString& errorMessageOut);
+};
+
+#endif // AUTHSERVICE_H

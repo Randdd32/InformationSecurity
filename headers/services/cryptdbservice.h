@@ -15,6 +15,9 @@ public:
     explicit CryptDBService(QObject *parent = nullptr);
     ~CryptDBService();
 
+    const QString ENCRYPTED_DB_FILE = "accounts.enc";
+    const QString TEMP_DB_FILE = "accounts.db.tmp";
+
     bool initAndLoad(const QString& passphrase);
     bool saveAndCleanup();
 
@@ -25,9 +28,6 @@ public:
     QList<UserAccount> getAllUsers();
 
 private:
-    const QString ENCRYPTED_DB_FILE = "accounts.enc";
-    const QString TEMP_DB_FILE = "accounts.db.tmp";
-
     QByteArray _key;
     QSqlDatabase _db;
 
