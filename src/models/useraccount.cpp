@@ -4,6 +4,16 @@ const QString UserAccount::ADMIN_USERNAME = "ADMIN";
 
 UserAccount::UserAccount() {}
 
+int UserAccount::id() const
+{
+    return _id;
+}
+
+void UserAccount::setId(int newId)
+{
+    _id = newId;
+}
+
 QString UserAccount::username() const
 {
     return _username;
@@ -72,6 +82,7 @@ bool UserAccount::isAdmin() const
 QVariantMap UserAccount::toVariantMap() const
 {
     QVariantMap map;
+    map["id"] = _id;
     map["username"] = _username;
     map["password_hash"] = _passwordHash;
     map["is_blocked"] = _isBlocked;
@@ -84,6 +95,7 @@ QVariantMap UserAccount::toVariantMap() const
 UserAccount UserAccount::fromVariantMap(const QVariantMap& map)
 {
     UserAccount acc;
+    acc.setId(map.value("id").toInt());
     acc.setUsername(map.value("username").toString());
     acc.setPasswordHash(map.value("password_hash").toString());
     acc.setIsBlocked(map.value("is_blocked").toBool());

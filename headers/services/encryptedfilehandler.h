@@ -18,7 +18,6 @@ public:
     bool encrypt(const QString& encryptedFilePath,
                  const QByteArray& plainData,
                  const QByteArray& key);
-signals:
 };
 
 #endif // ENCRYPTEDFILEHANDLER_H

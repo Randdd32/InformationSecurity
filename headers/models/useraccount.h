@@ -12,6 +12,9 @@ public:
     UserAccount();
     ~UserAccount() = default;
 
+    int id() const;
+    void setId(int newId);
+
     QString username() const;
     void setUsername(const QString &newUsername);
 
@@ -36,6 +39,7 @@ public:
     static UserAccount fromVariantMap(const QVariantMap& map);
 
 private:
+    int _id = -1;
     QString _username = "";
     QString _passwordHash = "";
     bool _isBlocked = false;
