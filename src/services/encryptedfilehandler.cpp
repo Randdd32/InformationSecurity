@@ -1,5 +1,7 @@
 #include "headers/services/encryptedfilehandler.h"
 #include "headers/utils/cryptoutils.h"
+#include "headers/utils/exceptions.h"
+
 #include <QFile>
 #include <QDebug>
 
@@ -16,7 +18,7 @@ QByteArray EncryptedFileHandler::decrypt(const QString& encryptedFilePath,
     QByteArray key = CryptoUtils::deriveKey(passphrase);
     if (key.isEmpty() || key.size() != CryptoUtils::DES_KEY_SIZE) {
         qCritical() << "Decryption failed: Key derivation error";
-        return QByteArray();
+        throw PassphraseIncorrectException("Decryption failed: key derivation error");
     }
     keyOut = key;
 
@@ -27,7 +29,7 @@ QByteArray EncryptedFileHandler::decrypt(const QString& encryptedFilePath,
 
     if (!encryptedFile.open(QIODevice::ReadOnly)) {
         qCritical() << "Cannot open encrypted file for reading: " << encryptedFile.errorString();
-        return QByteArray();
+        throw FileOpenException("Decryption failed: cannot open encrypted file for reading");
     }
 
     QByteArray iv = encryptedFile.read(CryptoUtils::DES_IV_SIZE);
@@ -36,14 +38,14 @@ QByteArray EncryptedFileHandler::decrypt(const QString& encryptedFilePath,
 
     if (iv.size() != CryptoUtils::DES_IV_SIZE) {
         qCritical() << "Encrypted file corrupted: IV size incorrect or file empty";
-        return QByteArray();
+        throw DBFileCorruptedException("Decryption failed. Encrypted file corrupted: IV size incorrect or file empty");
     }
 
     QByteArray decryptedData = CryptoUtils::decryptDES_CBC(encryptedData, key, iv);
 
     if (decryptedData.isEmpty()) {
         qCritical() << "Decryption failed. Incorrect passphrase or data corruption";
-        return QByteArray();
+        throw DecryptionException("Decryption failed. Incorrect passphrase or data corruption");
     }
 
     return decryptedData;

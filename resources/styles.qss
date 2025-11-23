@@ -1,0 +1,34 @@
+QMainWindow, QWidget {
+    background-color: white; 
+}
+
+QPushButton, QLineEdit, QTableWidget {
+    border: 1px solid black;
+    border-radius: 2px;
+}
+
+QLineEdit {
+	border-radius: 5px;
+}
+
+QCheckBox::indicator {
+    vertical-align: middle;
+}
+
+QPushButton {
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+QPushButton:hover {
+    background-color: #333333;
+    color: white;
+}
+
+QPushButton:pressed {
+    background-color: #222222;
+    border-width: 2px;
+    color: white;
+}

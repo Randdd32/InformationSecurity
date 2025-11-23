@@ -14,6 +14,9 @@ QList<UserAccount> AdminUserService::getAllUsers(QString& errorMessageOut)
     } catch (const DBException& e) {
         errorMessageOut = QString("Критическая ошибка БД при получении пользователей: %1").arg(e.what());
         return QList<UserAccount>();
+    } catch (const std::exception& e) {
+        errorMessageOut = QString("Ошибка при работе системы: (%1)").arg(e.what());
+        return QList<UserAccount>();
     }
     return users;
 }
@@ -27,6 +30,9 @@ bool AdminUserService::createUser(const QString& username, QString& errorMessage
         }
     } catch (const DBException& e) {
         errorMessageOut = QString("Критическая ошибка БД при проверке пользователя: %1").arg(e.what());
+        return false;
+    } catch (const std::exception& e) {
+        errorMessageOut = QString("Ошибка при работе системы: (%1)").arg(e.what());
         return false;
     }
 
@@ -120,6 +126,9 @@ UserAccount AdminUserService::getAccount(const QString& username, QString& error
         return UserAccount();
     } catch (const DBException& e) {
         errorMessageOut = QString("Критическая ошибка БД: %1").arg(e.what());
+        return UserAccount();
+    } catch (const std::exception& e) {
+        errorMessageOut = QString("Ошибка при работе системы: (%1)").arg(e.what());
         return UserAccount();
     }
 }

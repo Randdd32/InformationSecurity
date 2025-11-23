@@ -7,6 +7,7 @@
 
 #include "headers/models/useraccount.h"
 #include "headers/services/encryptedfilehandler.h"
+#include "headers/models/initdbstatus.h"
 
 class CryptDBService : public QObject
 {
@@ -18,7 +19,7 @@ public:
     const QString ENCRYPTED_DB_FILE = "accounts.enc";
     const QString TEMP_DB_FILE = "accounts.db.tmp";
 
-    bool initAndLoad(const QString& passphrase);
+    InitDBStatus initAndLoad(const QString& passphrase);
     bool saveAndCleanup();
 
     bool userExists(const QString& username);
@@ -33,7 +34,7 @@ private:
 
     EncryptedFileHandler* _fileHandler;
 
-    bool setupDatabaseSchema();
+    InitDBStatus setupDatabaseSchema(bool isFirstRun);
     bool checkAdminRecord();
 };
 

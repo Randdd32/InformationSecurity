@@ -22,21 +22,33 @@ CryptDBService::~CryptDBService()
     }
 }
 
-bool CryptDBService::initAndLoad(const QString& passphrase)
+InitDBStatus CryptDBService::initAndLoad(const QString& passphrase)
 {
     QFile tempFile(TEMP_DB_FILE);
+    bool isFirstRun = !QFile::exists(ENCRYPTED_DB_FILE);
 
-    QByteArray decryptedData = _fileHandler->decrypt(ENCRYPTED_DB_FILE, passphrase, _key);
+    QByteArray decryptedData;
 
-    if (decryptedData.isEmpty() && QFile::exists(ENCRYPTED_DB_FILE)) {
-        qCritical() << "Initialization failed: incorrect passphrase or file corrupted";
-        return false;
+    try {
+        decryptedData = _fileHandler->decrypt(ENCRYPTED_DB_FILE, passphrase, _key);
+
+    } catch (const PassphraseIncorrectException&) {
+        return InitDBStatus::PassphraseIncorrect;
+    } catch (const DecryptionException&) {
+        return InitDBStatus::DecryptionException;
+    } catch (const DBFileCorruptedException&) {
+        return InitDBStatus::DBFileCorrupted;
+    } catch (const FileOpenException&) {
+        return InitDBStatus::FileOpenError;
+    } catch (const std::exception& e) {
+        qCritical() << "Unexpected exception during decryption:" << e.what();
+        return InitDBStatus::SystemError;
     }
 
     if (!decryptedData.isEmpty()) {
         if (!tempFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             qCritical() << "Cannot open temporary file for writing:" << tempFile.errorString();
-            return false;
+            return InitDBStatus::FileOpenError;
         }
         tempFile.write(decryptedData);
         tempFile.close();
@@ -45,17 +57,19 @@ bool CryptDBService::initAndLoad(const QString& passphrase)
     if (!_db.open()) {
         qCritical() << "Cannot open temporary SQLite database:" << _db.lastError().text();
         QFile::remove(TEMP_DB_FILE);
-        return false;
+        return InitDBStatus::SystemError;
     }
 
-    if (!setupDatabaseSchema()) {
+    InitDBStatus schemaStatus = setupDatabaseSchema(isFirstRun);
+
+    if (schemaStatus != InitDBStatus::Success && schemaStatus != InitDBStatus::FirstRunSuccess) {
         _db.close();
         QFile::remove(TEMP_DB_FILE);
-        return false;
+        return schemaStatus;
     }
 
-    qDebug() << "DB Service initialized successfully.";
-    return true;
+    qDebug() << "DB Service initialized successfully";
+    return isFirstRun ? InitDBStatus::FirstRunSuccess : InitDBStatus::Success;
 }
 
 bool CryptDBService::saveAndCleanup()
@@ -85,11 +99,11 @@ bool CryptDBService::saveAndCleanup()
     return success;
 }
 
-bool CryptDBService::setupDatabaseSchema()
+InitDBStatus CryptDBService::setupDatabaseSchema(bool isFirstRun)
 {
     if (!_db.isOpen()) {
         qCritical() << "Database connection is not open for schema setup";
-        return false;
+        return InitDBStatus::SystemError;
     }
 
     QSqlQuery query(_db);
@@ -104,13 +118,13 @@ bool CryptDBService::setupDatabaseSchema()
 
     if (!query.exec(createTable)) {
         qCritical() << "Failed to create accounts table: " << query.lastError().text();
-        return false;
+        return InitDBStatus::SystemError;
     }
 
     bool adminExists = checkAdminRecord();
 
     if (!adminExists) {
-        if (!QFile::exists(ENCRYPTED_DB_FILE)) {
+        if (isFirstRun) {
             qDebug() << "Creating initial ADMIN account";
 
             UserAccount admin;
@@ -119,14 +133,15 @@ bool CryptDBService::setupDatabaseSchema()
 
             if (!createUser(admin)) {
                 qCritical() << "Failed to create initial ADMIN account";
-                return false;
+                return InitDBStatus::SystemError;
             }
+            return InitDBStatus::FirstRunSuccess;
         } else {
             qCritical() << "Database corruption: Encrypted file exists, but ADMIN record is missing";
-            return false;
+            return InitDBStatus::DBFileCorrupted;
         }
     }
-    return true;
+    return InitDBStatus::Success;
 }
 
 bool CryptDBService::checkAdminRecord()

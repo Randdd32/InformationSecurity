@@ -2,6 +2,7 @@
 #define AUTHSERVICE_H
 
 #include "headers/models/useraccount.h"
+#include "headers/models/initdbstatus.h"
 #include "headers/services/cryptdbservice.h"
 
 #include <QObject>
@@ -12,7 +13,8 @@ enum class AuthStatus {
     UserNotFound,
     IncorrectPassword,
     UserBlocked,
-    DatabaseError
+    DatabaseError,
+    SystemError
 };
 
 class AuthService : public QObject
@@ -21,7 +23,7 @@ class AuthService : public QObject
 public:
     explicit AuthService(QSharedPointer<CryptDBService> dbService, QObject *parent = nullptr);
 
-    bool initDB(const QString& passphrase);
+    InitDBStatus initDB(const QString& passphrase);
     AuthStatus authenticate(const QString& username, const QString& password, UserAccount& accountOut);
     bool changePassword(const QString& username, const QString& oldPassword, const QString& newPassword, QString& errorMessageOut);
     bool saveAndCleanup();

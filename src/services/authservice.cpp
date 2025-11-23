@@ -10,15 +10,15 @@ AuthService::AuthService(QSharedPointer<CryptDBService> dbService, QObject *pare
     : QObject{parent}, _dbService(dbService)
 {}
 
-bool AuthService::initDB(const QString& passphrase)
+InitDBStatus AuthService::initDB(const QString& passphrase)
 {
-    bool success = _dbService->initAndLoad(passphrase);
+    InitDBStatus status = _dbService->initAndLoad(passphrase);
 
-    if (!success) {
-        qCritical() << "Initialization failed: incorrect passphrase or DB error";
+    if (status != InitDBStatus::Success && status != InitDBStatus::FirstRunSuccess) {
+        qCritical() << "Initialization failed. Status: " << (int)status;
         QFile::remove(_dbService->TEMP_DB_FILE);
     }
-    return success;
+    return status;
 }
 
 AuthStatus AuthService::authenticate(const QString& username, const QString& password, UserAccount& accountOut)
@@ -31,6 +31,9 @@ AuthStatus AuthService::authenticate(const QString& username, const QString& pas
     } catch (const DBException& e) {
         qCritical() << "Authentication aborted due to DB error:" << e.what();
         return AuthStatus::DatabaseError;
+    } catch (const std::exception& e) {
+        qCritical() << "Unexpected error during authentication:" << e.what();
+        return AuthStatus::SystemError;
     }
 
     if (account.isBlocked()) {
@@ -60,6 +63,9 @@ bool AuthService::changePassword(const QString& username, const QString& oldPass
         return false;
     } catch (const DBException& e) {
         errorMessageOut = QString("Критическая ошибка БД при загрузке данных пользователя. Смена пароля невозможна. (%1)").arg(e.what());
+        return false;
+    } catch (const std::exception& e) {
+        errorMessageOut = QString("Ошибка при работе системы: (%1)").arg(e.what());
         return false;
     }
 
@@ -111,6 +117,9 @@ bool AuthService::validateNewPassword(const QString& username, const QString& ne
         return false;
     } catch (const DBException& e) {
         errorMessageOut = QString("Критическая ошибка БД при загрузке данных пользователя. Смена пароля невозможна. (%1)").arg(e.what());
+        return false;
+    } catch (const std::exception& e) {
+        errorMessageOut = QString("Ошибка при работе системы: (%1)").arg(e.what());
         return false;
     }
 

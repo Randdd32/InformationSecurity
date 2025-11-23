@@ -20,6 +20,7 @@ SOURCES += \
     headers/services/encryptedfilehandler.cpp \
     headers/utils/cryptoutils.cpp \
     headers/utils/passwordvalidator.cpp \
+    headers/views/initpassphrasewindow.cpp \
     headers/views/useraccount.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -31,9 +32,11 @@ SOURCES += \
     src/services/encryptedfilehandler.cpp \
     src/utils/cryptoutils.cpp \
     src/utils/passwordvalidator.cpp \
+    src/views/initpassphrasewindow.cpp \
     src/views/mainwindow.cpp
 
 HEADERS += \
+    headers/models/initdbstatus.h \
     headers/models/useraccount.h \
     headers/services/adminuserservice.h \
     headers/services/authservice.h \
@@ -42,6 +45,7 @@ HEADERS += \
     headers/utils/cryptoutils.h \
     headers/utils/exceptions.h \
     headers/utils/passwordvalidator.h \
+    headers/views/initpassphrasewindow.h \
     headers/views/mainwindow.h \
     headers/views/useraccount.h \
     mainwindow.h
@@ -53,4 +57,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     .gitignore \
-    README.md
+    README.md \
+    resources/images/mw-icon.png \
+    resources/styles.qss
+
+RESOURCES += \
+    resources/resources.qrc

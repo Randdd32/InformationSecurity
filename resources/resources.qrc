@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/mw-icon.png</file>
+        <file>styles.qss</file>
+    </qresource>
+</RCC>
