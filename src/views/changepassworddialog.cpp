@@ -34,8 +34,19 @@ void ChangePasswordDialog::setupUI()
     _newPassEdit->setMinimumHeight(40);
 
     _infoLabel = new QLabel("Введите новый пароль");
-    _infoLabel->setObjectName("InfoLabel"); // Мелкий шрифт
+    _infoLabel->setObjectName("InfoLabel");
     _infoLabel->setWordWrap(true);
+
+    try {
+        UserAccount userConf = _authService->getUser(_username);
+        QString reqText = QString("Пароль должен быть длиной не менее %1 символов.").arg(userConf.minPasswordLength());
+        if (userConf.passwordRestrictions()) {
+            reqText += "\nТребуется наличие: латинских букв (A-z), кириллицы (А-я) и цифр (0-9).";
+        }
+        _infoLabel->setText(reqText);
+    } catch (...) {
+        _infoLabel->setText("Введите новый пароль");
+    }
 
     _confirmLabel = new QLabel("Подтверждение нового пароля");
     _confirmLabel->setObjectName("FieldLabel");
@@ -51,15 +62,15 @@ void ChangePasswordDialog::setupUI()
     _cancelButton = new QPushButton("Отмена");
     _cancelButton->setObjectName("CancelButton");
     _cancelButton->setCursor(Qt::PointingHandCursor);
-    _cancelButton->setMinimumHeight(35);
+    _cancelButton->setMinimumHeight(30);
     _cancelButton->setMinimumWidth(150);
 
     _mainLayout = new QVBoxLayout(this);
-    _mainLayout->setContentsMargins(30, 30, 30, 30);
+    _mainLayout->setContentsMargins(30, 10, 30, 20);
     _mainLayout->setSpacing(10);
 
     _mainLayout->addWidget(_titleLabel);
-    _mainLayout->addSpacing(20);
+    _mainLayout->addSpacing(10);
     _mainLayout->addWidget(_oldPassLabel);
     _mainLayout->addWidget(_oldPassEdit);
     _mainLayout->addSpacing(10);

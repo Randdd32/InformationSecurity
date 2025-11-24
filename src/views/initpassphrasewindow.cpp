@@ -48,10 +48,11 @@ void InitPassphraseWindow::setupUI()
     }
 
     _mainLayout = new QVBoxLayout(this);
-    _mainLayout->setContentsMargins(30, 30, 30, 30);
+    _mainLayout->setContentsMargins(30, 10, 30, 20);
+    _mainLayout->setSpacing(10);
 
     _mainLayout->addWidget(_titleLabel);
-    _mainLayout->addSpacing(20);
+    _mainLayout->addSpacing(10);
     _mainLayout->addWidget(_promptLabel);
     _mainLayout->addWidget(_passphraseEdit);
     _mainLayout->addStretch();
@@ -69,7 +70,7 @@ void InitPassphraseWindow::setupUI()
             "Отказ от ввода парольной фразы. Приложение будет закрыто.",
             QMessageBox::Ok
         );
-        QApplication::quit();
+        this->reject();
     });
 
     setLayout(_mainLayout);
@@ -110,7 +111,7 @@ void InitPassphraseWindow::onEnterClicked()
                               QMessageBox::Close);
 
         if (status == InitDBStatus::PassphraseIncorrect || status == InitDBStatus::DecryptionException || status == InitDBStatus::DBFileCorrupted) {
-            QApplication::quit();
+            this->reject();
         }
     }
 }

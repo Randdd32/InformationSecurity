@@ -21,6 +21,7 @@ SOURCES += \
     src/services/encryptedfilehandler.cpp \
     src/utils/cryptoutils.cpp \
     src/utils/passwordvalidator.cpp \
+    src/views/adduserdialog.cpp \
     src/views/changepassworddialog.cpp \
     src/views/initpassphrasewindow.cpp \
     src/views/loginwindow.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     headers/utils/cryptoutils.h \
     headers/utils/exceptions.h \
     headers/utils/passwordvalidator.h \
+    headers/views/adduserdialog.h \
     headers/views/changepassworddialog.h \
     headers/views/initpassphrasewindow.h \
     headers/views/loginwindow.h \

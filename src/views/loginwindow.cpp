@@ -50,11 +50,11 @@ void LoginWindow::setupUI()
     _actionButton->setMinimumHeight(50);
 
     _mainLayout = new QVBoxLayout(this);
-    _mainLayout->setContentsMargins(30, 30, 30, 30);
+    _mainLayout->setContentsMargins(30, 10, 30, 20);
     _mainLayout->setSpacing(10);
 
     _mainLayout->addWidget(_titleLabel);
-    _mainLayout->addSpacing(20);
+    _mainLayout->addSpacing(10);
     _mainLayout->addWidget(_userLabel);
     _mainLayout->addWidget(_usernameEdit);
     _mainLayout->addSpacing(10);
@@ -64,6 +64,7 @@ void LoginWindow::setupUI()
     _mainLayout->addSpacing(10);
     _mainLayout->addWidget(_confirmLabel);
     _mainLayout->addWidget(_confirmEdit);
+    _mainLayout->addSpacing(10);
     _mainLayout->addStretch();
     _mainLayout->addWidget(_actionButton);
 
@@ -110,6 +111,9 @@ void LoginWindow::updateMode(bool isFirstLogin, const UserAccount& userConf)
         _confirmEdit->setVisible(false);
         _requirementsLabel->setVisible(false);
     }
+
+    layout()->invalidate();
+    adjustSize();
 }
 
 void LoginWindow::onLoginClicked()

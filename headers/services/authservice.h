@@ -32,6 +32,7 @@ public:
     void resetLoginAttemptCount();
     void incrementLoginAttemptCount();
 
+    UserAccount getUser(const QString& username);
     bool checkIsFirstLogin(const QString& username, UserAccount& accountOut);
 
 private:
