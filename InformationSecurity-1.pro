@@ -22,6 +22,7 @@ SOURCES += \
     src/utils/cryptoutils.cpp \
     src/utils/passwordvalidator.cpp \
     src/views/initpassphrasewindow.cpp \
+    src/views/loginwindow.cpp \
     src/views/mainwindow.cpp
 
 HEADERS += \
@@ -35,6 +36,7 @@ HEADERS += \
     headers/utils/exceptions.h \
     headers/utils/passwordvalidator.h \
     headers/views/initpassphrasewindow.h \
+    headers/views/loginwindow.h \
     headers/views/mainwindow.h \
 
 # Default rules for deployment.

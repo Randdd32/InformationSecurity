@@ -32,6 +32,8 @@ public:
     void resetLoginAttemptCount();
     void incrementLoginAttemptCount();
 
+    bool checkIsFirstLogin(const QString& username, UserAccount& accountOut);
+
 private:
     QSharedPointer<CryptDBService> _dbService;
     int _loginAttemptCount = 0;

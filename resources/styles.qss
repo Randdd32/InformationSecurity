@@ -1,5 +1,6 @@
 QMainWindow, QWidget {
-    background-color: white; 
+    background-color: white;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
 QPushButton, QLineEdit, QTableWidget {
@@ -8,7 +9,32 @@ QPushButton, QLineEdit, QTableWidget {
 }
 
 QLineEdit {
-	border-radius: 5px;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid black;
+}
+
+QLabel#HeaderLabel {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+
+QLabel#FieldLabel {
+    font-size: 14px;
+    color: #333333;
+    margin-bottom: 2px;
+}
+
+QLabel#InfoLabel {
+    font-size: 11px;
+    color: #d9534f;
+    font-style: italic;
+    margin-top: 2px;
 }
 
 QCheckBox::indicator {

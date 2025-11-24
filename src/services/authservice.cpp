@@ -110,6 +110,17 @@ void AuthService::incrementLoginAttemptCount()
     _loginAttemptCount++;
 }
 
+bool AuthService::checkIsFirstLogin(const QString& username, UserAccount& accountOut)
+{
+    try {
+        UserAccount user = _dbService->getUser(username);
+        accountOut = user;
+        return user.isFirstLogin();
+    } catch (...) {
+        return false;
+    }
+}
+
 bool AuthService::validateNewPassword(const QString& username, const QString& newPassword, QString& errorMessageOut)
 {
     UserAccount account;

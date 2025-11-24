@@ -13,6 +13,7 @@ InitPassphraseWindow::InitPassphraseWindow(QSharedPointer<AuthService> authServi
     setupUI();
     applyStyle();
     setWindowTitle(_isFirstRun ? "Инициализация БД" : "Вход: парольная фраза");
+    setMinimumSize(500, 275);
 }
 
 InitPassphraseWindow::~InitPassphraseWindow() {}
@@ -20,25 +21,25 @@ InitPassphraseWindow::~InitPassphraseWindow() {}
 void InitPassphraseWindow::setupUI()
 {
     _titleLabel = new QLabel("Загрузка базы данных");
-    _titleLabel->setObjectName("TitleLabel");
+    _titleLabel->setObjectName("HeaderLabel");
     _titleLabel->setAlignment(Qt::AlignCenter);
-    _titleLabel->setStyleSheet("font-size: 18pt; font-weight: bold; margin-bottom: 20px;");
 
     _promptLabel = new QLabel("Введите парольную фразу для базы данных:");
-    _promptLabel->setObjectName("PromptLabel");
-    _promptLabel->setStyleSheet("font-size: 14pt;");
+    _promptLabel->setObjectName("FieldLabel");
 
     _passphraseEdit = new QLineEdit();
     _passphraseEdit->setObjectName("PassphraseEdit");
     _passphraseEdit->setEchoMode(QLineEdit::Password);
-    _passphraseEdit->setPlaceholderText("Парольная фраза");
+    _passphraseEdit->setMinimumHeight(40);
 
     _enterButton = new QPushButton("Подтвердить");
     _enterButton->setObjectName("EnterButton");
+    _enterButton->setCursor(Qt::PointingHandCursor);
     _enterButton->setMinimumHeight(50);
 
     _cancelButton = new QPushButton("Отмена ввода");
     _cancelButton->setObjectName("CancelButton");
+    _cancelButton->setCursor(Qt::PointingHandCursor);
     _cancelButton->setMinimumHeight(30);
     _cancelButton->setMinimumWidth(150);
 
@@ -49,14 +50,16 @@ void InitPassphraseWindow::setupUI()
     }
 
     _mainLayout = new QVBoxLayout(this);
+    _mainLayout->setContentsMargins(30, 30, 30, 30);
+
     _mainLayout->addWidget(_titleLabel);
+    _mainLayout->addSpacing(20);
     _mainLayout->addWidget(_promptLabel);
     _mainLayout->addWidget(_passphraseEdit);
     _mainLayout->addSpacing(15);
     _mainLayout->addWidget(_enterButton);
     _mainLayout->addSpacing(5);
     _mainLayout->addWidget(_cancelButton, 0, Qt::AlignLeft);
-    _mainLayout->setContentsMargins(30, 30, 30, 30);
 
     connect(_enterButton, &QPushButton::clicked, this, &InitPassphraseWindow::onEnterClicked);
     connect(_passphraseEdit, &QLineEdit::returnPressed, this, &InitPassphraseWindow::onEnterClicked);
@@ -117,21 +120,21 @@ void InitPassphraseWindow::onEnterClicked()
 QString InitPassphraseWindow::getStatusMessage(InitDBStatus status)
 {
     switch (status) {
-    case InitDBStatus::Success:
-        return "База данных успешно загружена.";
-    case InitDBStatus::FirstRunSuccess:
-        return "База данных успешно инициализирована. Создан пользователь ADMIN с пустым паролем.";
-    case InitDBStatus::DBFileCorrupted:
-        return "Файл базы данных поврежден (отсутствует учетная запись администратора или произошла ошибка при получении IV). Приложение будет закрыто.";
-    case InitDBStatus::PassphraseIncorrect:
-        return "Парольная фраза неверна. Приложение будет закрыто.";
-    case InitDBStatus::DecryptionException:
-        return "Произошла ошибка при расшифровке файла БД. Повреждены данные или парольная фраза неверна. Приложение будет закрыто.";
-    case InitDBStatus::FileOpenError:
-        return "Произошла ошибка доступа к файлам БД (зашифрованному или временному). Проверьте права доступа.";
-    case InitDBStatus::SystemError:
-        return "Произошла ошибка в работе системы. Пожалуйста, попробуйте снова.";
-    default:
-        return "Ошибка инициализации. Пожалуйста, попробуйте снова.";
+        case InitDBStatus::Success:
+            return "База данных успешно загружена.";
+        case InitDBStatus::FirstRunSuccess:
+            return "База данных успешно инициализирована. Создан пользователь ADMIN с пустым паролем.";
+        case InitDBStatus::DBFileCorrupted:
+            return "Файл базы данных поврежден (отсутствует учетная запись администратора или произошла ошибка при получении IV). Приложение будет закрыто.";
+        case InitDBStatus::PassphraseIncorrect:
+            return "Парольная фраза неверна. Приложение будет закрыто.";
+        case InitDBStatus::DecryptionException:
+            return "Произошла ошибка при расшифровке файла БД. Повреждены данные или парольная фраза неверна. Приложение будет закрыто.";
+        case InitDBStatus::FileOpenError:
+            return "Произошла ошибка доступа к файлам БД (зашифрованному или временному). Проверьте права доступа.";
+        case InitDBStatus::SystemError:
+            return "Произошла ошибка в работе системы. Пожалуйста, попробуйте снова.";
+        default:
+            return "Ошибка инициализации. Пожалуйста, попробуйте снова.";
     }
 }
