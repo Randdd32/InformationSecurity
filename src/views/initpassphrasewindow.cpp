@@ -28,12 +28,10 @@ void InitPassphraseWindow::setupUI()
     _promptLabel->setObjectName("FieldLabel");
 
     _passphraseEdit = new QLineEdit();
-    _passphraseEdit->setObjectName("PassphraseEdit");
     _passphraseEdit->setEchoMode(QLineEdit::Password);
     _passphraseEdit->setMinimumHeight(40);
 
     _enterButton = new QPushButton("Подтвердить");
-    _enterButton->setObjectName("EnterButton");
     _enterButton->setCursor(Qt::PointingHandCursor);
     _enterButton->setMinimumHeight(50);
 
@@ -56,7 +54,7 @@ void InitPassphraseWindow::setupUI()
     _mainLayout->addSpacing(20);
     _mainLayout->addWidget(_promptLabel);
     _mainLayout->addWidget(_passphraseEdit);
-    _mainLayout->addSpacing(15);
+    _mainLayout->addStretch();
     _mainLayout->addWidget(_enterButton);
     _mainLayout->addSpacing(5);
     _mainLayout->addWidget(_cancelButton, 0, Qt::AlignLeft);

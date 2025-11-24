@@ -29,6 +29,7 @@ private:
     void handleAuthStatus(AuthStatus status, const UserAccount& user);
 
     QSharedPointer<AuthService> _authService;
+    bool _isFirstLoginMode = false;
 
     QLabel* _titleLabel;
     QLabel* _userLabel;
@@ -40,8 +41,6 @@ private:
     QLabel* _requirementsLabel;
     QPushButton* _actionButton;
     QVBoxLayout* _mainLayout;
-
-    bool _isFirstLoginMode = false;
 };
 
 #endif // LOGINWINDOW_H

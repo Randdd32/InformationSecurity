@@ -23,6 +23,8 @@ private:
     void setupUI();
     void applyStyle();
 
+    QString getStatusMessage(InitDBStatus status);
+
     QSharedPointer<AuthService> _authService;
     bool _isFirstRun;
 
@@ -32,8 +34,6 @@ private:
     QPushButton* _enterButton;
     QPushButton* _cancelButton;
     QVBoxLayout* _mainLayout;
-
-    QString getStatusMessage(InitDBStatus status);
 };
 
 #endif // INITPASSPHRASEWINDOW_H
