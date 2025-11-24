@@ -26,7 +26,7 @@ public:
     bool createUser(const UserAccount& account);
     UserAccount getUser(const QString& username);
     bool updateUser(const UserAccount& account);
-    QList<UserAccount> getAllUsers();
+    QList<UserAccount> getAllUsers(const QString& searchText = "");
 
 private:
     QByteArray _key;

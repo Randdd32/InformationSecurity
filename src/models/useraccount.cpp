@@ -74,6 +74,16 @@ void UserAccount::setPasswordExpirationMonths(int newPasswordExpirationMonths)
     _passwordExpirationMonths = newPasswordExpirationMonths;
 }
 
+bool UserAccount::isFirstLogin() const
+{
+    return _isFirstLogin;
+}
+
+void UserAccount::setIsFirstLogin(bool newIsFirstLogin)
+{
+    _isFirstLogin = newIsFirstLogin;
+}
+
 bool UserAccount::isAdmin() const
 {
     return _username == ADMIN_USERNAME;
@@ -89,6 +99,7 @@ QVariantMap UserAccount::toVariantMap() const
     map["restrictions_enabled"] = _passwordRestrictions;
     map["min_password_length"] = _minPasswordLength;
     map["password_expiration_months"] = _passwordExpirationMonths;
+    map["is_first_login"] = _isFirstLogin;
     return map;
 }
 
@@ -102,5 +113,6 @@ UserAccount UserAccount::fromVariantMap(const QVariantMap& map)
     acc.setPasswordRestrictions(map.value("restrictions_enabled").toBool());
     acc.setMinPasswordLength(map.value("min_password_length").toInt());
     acc.setPasswordExpirationMonths(map.value("password_expiration_months").toInt());
+    acc.setIsFirstLogin(map.value("is_first_login").toBool());
     return acc;
 }

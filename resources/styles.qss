@@ -32,3 +32,14 @@ QPushButton:pressed {
     border-width: 2px;
     color: white;
 }
+
+QPushButton#CancelButton {
+    background-color: #6c757d;
+    border: none;
+    color: white;
+}
+
+QPushButton#CancelButton:hover {
+    background-color: #5c636a;
+    color: white;
+}

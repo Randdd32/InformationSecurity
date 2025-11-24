@@ -114,7 +114,8 @@ InitDBStatus CryptDBService::setupDatabaseSchema(bool isFirstRun)
                                   "is_blocked INTEGER NOT NULL, "
                                   "restrictions_enabled INTEGER NOT NULL, "
                                   "min_password_length INTEGER NOT NULL, "
-                                  "password_expiration_months INTEGER NOT NULL)");
+                                  "password_expiration_months INTEGER NOT NULL, "
+                                  "is_first_login INTEGER NOT NULL)");
 
     if (!query.exec(createTable)) {
         qCritical() << "Failed to create accounts table: " << query.lastError().text();
@@ -173,8 +174,10 @@ bool CryptDBService::userExists(const QString& username)
 bool CryptDBService::createUser(const UserAccount& account)
 {
     QSqlQuery query(_db);
-    query.prepare("INSERT INTO accounts (username, password_hash, is_blocked, restrictions_enabled, min_password_length, password_expiration_months) "
-                  "VALUES (:username, :password_hash, :is_blocked, :restrictions_enabled, :min_password_length, :password_expiration_months)");
+    query.prepare("INSERT INTO accounts (username, password_hash, is_blocked, "
+                  "restrictions_enabled, min_password_length, password_expiration_months, is_first_login) "
+                  "VALUES (:username, :password_hash, :is_blocked, "
+                  ":restrictions_enabled, :min_password_length, :password_expiration_months, :is_first_login)");
 
     QVariantMap map = account.toVariantMap();
     map.remove("id");
@@ -230,7 +233,8 @@ bool CryptDBService::updateUser(const UserAccount& account)
                   "is_blocked = :is_blocked, "
                   "restrictions_enabled = :restrictions_enabled, "
                   "min_password_length = :min_password_length, "
-                  "password_expiration_months = :password_expiration_months "
+                  "password_expiration_months = :password_expiration_months, "
+                  "is_first_login = :is_first_login "
                   "WHERE id = :id");
 
     query.bindValue(":password_hash", account.passwordHash());
@@ -238,6 +242,7 @@ bool CryptDBService::updateUser(const UserAccount& account)
     query.bindValue(":restrictions_enabled", account.passwordRestrictions());
     query.bindValue(":min_password_length", account.minPasswordLength());
     query.bindValue(":password_expiration_months", account.passwordExpirationMonths());
+    query.bindValue(":is_first_login", account.isFirstLogin());
     query.bindValue(":id", account.id());
 
     if (!query.exec()) {
@@ -248,12 +253,23 @@ bool CryptDBService::updateUser(const UserAccount& account)
     return query.numRowsAffected() > 0;
 }
 
-QList<UserAccount> CryptDBService::getAllUsers()
+QList<UserAccount> CryptDBService::getAllUsers(const QString& searchText)
 {
     QList<UserAccount> users;
     QSqlQuery query(_db);
-    if (!query.exec("SELECT * FROM accounts")) {
-        qCritical() << "Failed to get all users: " << query.lastError().text();
+
+    QString sql = "SELECT * FROM accounts";
+    if (!searchText.isEmpty()) {
+        sql += " WHERE username LIKE :search";
+    }
+
+    query.prepare(sql);
+    if (!searchText.isEmpty()) {
+        query.bindValue(":search", "%" + searchText + "%");
+    }
+
+    if (!query.exec()) {
+        qCritical() << "Failed to get users: " << query.lastError().text();
         throw DBException(query.lastError().text());
     }
 

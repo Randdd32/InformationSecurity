@@ -33,6 +33,9 @@ public:
     int passwordExpirationMonths() const;
     void setPasswordExpirationMonths(int newPasswordExpirationMonths);
 
+    bool isFirstLogin() const;
+    void setIsFirstLogin(bool newIsFirstLogin);
+
     bool isAdmin() const;
 
     QVariantMap toVariantMap() const;
@@ -46,6 +49,7 @@ private:
     bool _passwordRestrictions = false;
     int _minPasswordLength = 0;
     int _passwordExpirationMonths = 0;
+    bool _isFirstLogin = true;
 };
 
 #endif // USERACCOUNT_H

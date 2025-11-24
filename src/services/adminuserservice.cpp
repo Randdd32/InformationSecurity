@@ -6,11 +6,11 @@ AdminUserService::AdminUserService(QSharedPointer<CryptDBService> dbService, QOb
     : QObject{parent}, _dbService(dbService)
 {}
 
-QList<UserAccount> AdminUserService::getAllUsers(QString& errorMessageOut)
+QList<UserAccount> AdminUserService::getAllUsers(const QString& searchText, QString& errorMessageOut)
 {
     QList<UserAccount> users;
     try {
-        users = _dbService->getAllUsers();
+        users = _dbService->getAllUsers(searchText);
     } catch (const DBException& e) {
         errorMessageOut = QString("Критическая ошибка БД при получении пользователей: %1").arg(e.what());
         return QList<UserAccount>();
@@ -61,7 +61,12 @@ bool AdminUserService::changeUserBlockStatus(const QString& username, bool block
         return false;
     }
 
+    if (account.isBlocked() == block) {
+        return true;
+    }
+
     account.setIsBlocked(block);
+
     if (!_dbService->updateUser(account)) {
         errorMessageOut = QString("Ошибка при обновлении статуса пользователя %1")
                               .arg(username);
@@ -79,7 +84,14 @@ bool AdminUserService::setPasswordRestrictions(const QString& username, bool ena
         return false;
     }
 
+    if (account.passwordRestrictions() == enabled) {
+        return true;
+    }
+
     account.setPasswordRestrictions(enabled);
+    account.setIsFirstLogin(true);
+    account.setPasswordHash(CryptoUtils::hashMD5(""));
+
     if (!_dbService->updateUser(account)) {
         errorMessageOut = QString("Ошибка при попытке изменения ограничений на пароль пользователя %1")
                               .arg(username);
@@ -89,10 +101,10 @@ bool AdminUserService::setPasswordRestrictions(const QString& username, bool ena
     return true;
 }
 
-bool AdminUserService::setPasswordPolicy(const QString& username, int minLength, int expirationMonths, QString& errorMessageOut)
+bool AdminUserService::setPasswordMinLength(const QString& username, int minLength, QString& errorMessageOut)
 {
-    if (minLength < 0 || expirationMonths < 0) {
-        errorMessageOut = "Минимальная длина и срок действия пароля не могут быть отрицательными";
+    if (minLength < 0) {
+        errorMessageOut = "Минимальная длина пароля не может быть отрицательной";
         return false;
     }
 
@@ -102,12 +114,43 @@ bool AdminUserService::setPasswordPolicy(const QString& username, int minLength,
         return false;
     }
 
+    if (account.minPasswordLength() == minLength) {
+        return true;
+    }
+
     account.setMinPasswordLength(minLength);
+    account.setIsFirstLogin(true);
+    account.setPasswordHash(CryptoUtils::hashMD5(""));
+
+    if (!_dbService->updateUser(account)) {
+        errorMessageOut = QString("Ошибка при изменении минимальной длины пароля для пользователя %1").arg(username);
+        return false;
+    }
+
+    return true;
+}
+
+bool AdminUserService::setPasswordExpiration(const QString& username, int expirationMonths, QString& errorMessageOut)
+{
+    if (expirationMonths < 0) {
+        errorMessageOut = "Срок действия пароля не может быть отрицательным";
+        return false;
+    }
+
+    bool success = false;
+    UserAccount account = getAccount(username, errorMessageOut, success);
+    if (!success) {
+        return false;
+    }
+
+    if (account.passwordExpirationMonths() == expirationMonths) {
+        return true;
+    }
+
     account.setPasswordExpirationMonths(expirationMonths);
 
     if (!_dbService->updateUser(account)) {
-        errorMessageOut = QString("Ошибка при попытке изменения политики пароля пользователя %1")
-                              .arg(username);
+        errorMessageOut = QString("Ошибка при изменении срока действия пароля для пользователя %1").arg(username);
         return false;
     }
 

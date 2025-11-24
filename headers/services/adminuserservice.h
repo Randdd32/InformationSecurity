@@ -12,12 +12,13 @@ class AdminUserService : public QObject
 public:
     explicit AdminUserService(QSharedPointer<CryptDBService> dbService, QObject *parent = nullptr);
 
-    QList<UserAccount> getAllUsers(QString& errorMessageOut);
+    QList<UserAccount> getAllUsers(const QString& searchText, QString& errorMessageOut);
 
     bool createUser(const QString& username, QString& errorMessageOut);
     bool changeUserBlockStatus(const QString& username, bool block, QString& errorMessageOut);
     bool setPasswordRestrictions(const QString& username, bool enabled, QString& errorMessageOut);
-    bool setPasswordPolicy(const QString& username, int minLength, int expirationMonths, QString& errorMessageOut);
+    bool setPasswordMinLength(const QString& username, int minLength, QString& errorMessageOut);
+    bool setPasswordExpiration(const QString& username, int expirationMonths, QString& errorMessageOut);
 
 private:
     QSharedPointer<CryptDBService> _dbService;

@@ -79,6 +79,9 @@ bool AuthService::changePassword(const QString& username, const QString& oldPass
     }
 
     account.setPasswordHash(CryptoUtils::hashMD5(newPassword));
+    if (account.isFirstLogin()) {
+        account.setIsFirstLogin(false);
+    }
     if (!_dbService->updateUser(account)) {
         errorMessageOut = "Ошибка при сохранении нового пароля в базе данных";
         return false;
