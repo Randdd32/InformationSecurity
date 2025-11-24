@@ -19,13 +19,15 @@ SOURCES += \
     src/services/authservice.cpp \
     src/services/cryptdbservice.cpp \
     src/services/encryptedfilehandler.cpp \
+    src/utils/buttonhoverwatcher.cpp \
     src/utils/cryptoutils.cpp \
     src/utils/passwordvalidator.cpp \
     src/views/adduserdialog.cpp \
     src/views/changepassworddialog.cpp \
     src/views/initpassphrasewindow.cpp \
     src/views/loginwindow.cpp \
-    src/views/mainwindow.cpp
+    src/views/mainwindow.cpp \
+    src/views/userlistwindow.cpp
 
 HEADERS += \
     headers/models/initdbstatus.h \
@@ -34,6 +36,7 @@ HEADERS += \
     headers/services/authservice.h \
     headers/services/cryptdbservice.h \
     headers/services/encryptedfilehandler.h \
+    headers/utils/buttonhoverwatcher.h \
     headers/utils/cryptoutils.h \
     headers/utils/exceptions.h \
     headers/utils/passwordvalidator.h \
@@ -42,6 +45,7 @@ HEADERS += \
     headers/views/initpassphrasewindow.h \
     headers/views/loginwindow.h \
     headers/views/mainwindow.h \
+    headers/views/userlistwindow.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -52,6 +56,8 @@ DISTFILES += \
     .gitignore \
     README.md \
     resources/images/mw-icon.png \
+    resources/images/search-hover.png \
+    resources/images/search.png \
     resources/styles.qss
 
 RESOURCES += \

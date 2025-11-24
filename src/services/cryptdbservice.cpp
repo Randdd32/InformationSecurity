@@ -258,12 +258,13 @@ QList<UserAccount> CryptDBService::getAllUsers(const QString& searchText)
     QList<UserAccount> users;
     QSqlQuery query(_db);
 
-    QString sql = "SELECT * FROM accounts";
+    QString sql = "SELECT * FROM accounts WHERE username != :admin_name";
     if (!searchText.isEmpty()) {
-        sql += " WHERE username LIKE :search";
+        sql += " AND username LIKE :search";
     }
 
     query.prepare(sql);
+    query.bindValue(":admin_name", UserAccount::ADMIN_USERNAME);
     if (!searchText.isEmpty()) {
         query.bindValue(":search", "%" + searchText + "%");
     }
