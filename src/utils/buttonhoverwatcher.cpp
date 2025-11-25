@@ -11,12 +11,12 @@ bool ButtonHoverWatcher::eventFilter(QObject *watched, QEvent *event)
     }
 
     if (event->type() == QEvent::Enter) {
-        button->setIcon(QIcon(":/images/search-hover.png"));
+        button->setIcon(QIcon(":/images/clear-hover.png"));
         return true;
     }
 
     if (event->type() == QEvent::Leave){
-        button->setIcon(QIcon(":/images/search.png"));
+        button->setIcon(QIcon(":/images/clear.png"));
         return true;
     }
 

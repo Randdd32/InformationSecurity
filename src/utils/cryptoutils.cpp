@@ -6,6 +6,7 @@
 #include <QFile>
 
 #include <openssl/evp.h>
+#include <openssl/err.h>
 
 QString CryptoUtils::hashMD5(const QString &data)
 {
@@ -49,6 +50,7 @@ QByteArray CryptoUtils::encryptDES_CBC(const QByteArray &plainData, const QByteA
         qCritical() << "EVP_CIPHER_CTX_new failed";
         return QByteArray();
     }
+    EVP_CIPHER_CTX_init(ctx);
 
     if (1 != EVP_EncryptInit_ex(ctx, EVP_des_cbc(), NULL, (const unsigned char*)key.constData(), (const unsigned char*)iv.constData())) {
         qCritical() << "EVP_EncryptInit_ex failed";
@@ -94,6 +96,7 @@ QByteArray CryptoUtils::decryptDES_CBC(const QByteArray &encryptedData, const QB
         qCritical() << "EVP_CIPHER_CTX_new failed";
         return QByteArray();
     }
+    EVP_CIPHER_CTX_init(ctx);
 
     if (1 != EVP_DecryptInit_ex(ctx, EVP_des_cbc(), NULL, (const unsigned char*)key.constData(), (const unsigned char*)iv.constData())) {
         qCritical() << "EVP_DecryptInit_ex failed";

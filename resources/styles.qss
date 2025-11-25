@@ -5,17 +5,38 @@ QMainWindow, QWidget {
 
 QPushButton, QLineEdit, QTableWidget {
     border: 1px solid black;
-    border-radius: 2px;
+    border-radius: 6px;
 }
 
 QLineEdit {
-    border-radius: 5px;
     padding: 0 10px;
     font-size: 14px;
 }
 
 QLineEdit:focus {
     border: 2px solid black;
+}
+
+QTableWidget {
+    gridline-color: #eeeeee;
+    font-size: 14px;
+}
+
+QTableWidget::item {
+    padding: 5px;
+}
+
+QTableWidget::item:selected {
+    background-color: #e0e0e0;
+    color: black;
+}
+
+QHeaderView::section {
+    background-color: #f8f9fa;
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid black;
+    font-weight: bold;
 }
 
 QLabel#HeaderLabel {
@@ -47,7 +68,6 @@ QPushButton {
     background-color: black;
     color: white;
     padding: 5px;
-    border-radius: 4px;
 }
 
 QPushButton:hover {

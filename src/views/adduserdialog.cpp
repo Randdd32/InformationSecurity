@@ -7,7 +7,7 @@ AddUserDialog::AddUserDialog(QSharedPointer<AdminUserService> adminService, QWid
 {
     setupUI();
     setWindowTitle("Новый пользователь");
-    setMinimumSize(500, 250);
+    setMinimumSize(500, 300);
     setModal(true);
 }
 
@@ -46,7 +46,7 @@ void AddUserDialog::setupUI()
     _mainLayout->addStretch();
     _mainLayout->addWidget(_createButton);
     _mainLayout->addSpacing(5);
-    _mainLayout->addWidget(_cancelButton);
+    _mainLayout->addWidget(_cancelButton, 0, Qt::AlignLeft);
 
     connect(_createButton, &QPushButton::clicked, this, &AddUserDialog::onCreateClicked);
     connect(_nameEdit, &QLineEdit::returnPressed, this, &AddUserDialog::onCreateClicked);

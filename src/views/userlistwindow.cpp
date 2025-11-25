@@ -134,6 +134,7 @@ void UserListWindow::loadUsers()
     }
 
     _usersTable->blockSignals(false);
+    _usersTable->scrollToTop();
     _isLoadingData = false;
 }
 
@@ -153,7 +154,6 @@ void UserListWindow::onAddUserClicked()
     if (dialog.exec() == QDialog::Accepted) {
         _searchEdit->clear();
         loadUsers();
-        _usersTable->scrollToTop();
     }
 }
 

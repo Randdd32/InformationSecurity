@@ -75,25 +75,33 @@ InitDBStatus CryptDBService::initAndLoad(const QString& passphrase)
 bool CryptDBService::saveAndCleanup()
 {
     QFile tempFile(TEMP_DB_FILE);
+    bool success = true;
 
     if (!_db.isOpen()) {
-        qDebug() << "DB is not open. Nothing to save";
-        return true;
+        qDebug() << "DB is not open. Attempting to clean up temporary file.";
+
+        if (tempFile.exists() && !tempFile.remove()) {
+            qWarning() << "Could not remove temporary DB file (DB was not open): " << tempFile.errorString();
+            success = false;
+        }
+        return success;
     }
 
     _db.close();
 
     if (!tempFile.open(QIODevice::ReadOnly)) {
         qCritical() << "Cannot open temporary file for reading before encryption: " << tempFile.errorString();
-        return false;
+        success = false;
+    } else {
+        QByteArray plainData = tempFile.readAll();
+        tempFile.close();
+
+        success = _fileHandler->encrypt(ENCRYPTED_DB_FILE, plainData, _key);
     }
-    QByteArray plainData = tempFile.readAll();
-    tempFile.close();
 
-    bool success = _fileHandler->encrypt(ENCRYPTED_DB_FILE, plainData, _key);
-
-    if (success && !tempFile.remove()) {
-        qWarning() << "Could not remove temporary DB file: " << tempFile.errorString();
+    if (tempFile.exists() && !tempFile.remove()) {
+        qCritical() << "Could not remove temporary DB file: " << tempFile.errorString();
+        success = false;
     }
 
     return success;
@@ -131,6 +139,7 @@ InitDBStatus CryptDBService::setupDatabaseSchema(bool isFirstRun)
             UserAccount admin;
             admin.setUsername(UserAccount::ADMIN_USERNAME);
             admin.setPasswordHash(CryptoUtils::hashMD5(""));
+            admin.setMinPasswordLength(8);
 
             if (!createUser(admin)) {
                 qCritical() << "Failed to create initial ADMIN account";

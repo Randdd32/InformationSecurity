@@ -4,9 +4,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets sql
 
 CONFIG += c++17
 
-OPENSSL_ROOT = "C:/OpenSSL-Win64"
+OPENSSL_ROOT = "C:/Program Files/OpenSSL-Win64"
 INCLUDEPATH += $$OPENSSL_ROOT/include
-LIBS += -L$$OPENSSL_ROOT/lib/VC/x64/MD -llibcrypto -llibssl
+LIBS += -L$$OPENSSL_ROOT/lib/VC/ -llibcrypto64MD -llibssl64MD
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
