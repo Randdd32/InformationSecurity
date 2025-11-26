@@ -83,7 +83,7 @@ void ChangePasswordDialog::setupUI()
     _mainLayout->addStretch();
     _mainLayout->addWidget(_changeButton);
     _mainLayout->addSpacing(5);
-    _mainLayout->addWidget(_cancelButton);
+    _mainLayout->addWidget(_cancelButton, 0, Qt::AlignLeft);
 
     connect(_changeButton, &QPushButton::clicked, this, &ChangePasswordDialog::onChangeClicked);
     connect(_cancelButton, &QPushButton::clicked, this, &ChangePasswordDialog::reject);

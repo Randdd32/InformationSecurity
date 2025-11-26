@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QListWidget>
 #include <QGridLayout>
 
 #include "headers/services/authservice.h"
@@ -40,10 +41,7 @@ private:
 
     QLabel* _statusLabel;
     QLabel* _userLabel;
-    QPushButton* _changePassButton;
-    QPushButton* _userListButton;
-    QPushButton* _logoutButton;
-    QGridLayout* _buttonGrid;
+    QListWidget* _actionList;
     QAction* _changePassAction;
     QAction* _userListAction;
     QAction* _aboutAction;

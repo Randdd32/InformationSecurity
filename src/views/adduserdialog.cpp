@@ -7,7 +7,7 @@ AddUserDialog::AddUserDialog(QSharedPointer<AdminUserService> adminService, QWid
 {
     setupUI();
     setWindowTitle("Новый пользователь");
-    setMinimumSize(500, 300);
+    setMinimumSize(500, 290);
     setModal(true);
 }
 

@@ -3,6 +3,9 @@
         <file>images/mw-icon.png</file>
 		<file>images/clear.png</file>
 		<file>images/clear-hover.png</file>
+		<file>images/pass.png</file>
+		<file>images/users.png</file>
+		<file>images/exit.png</file>
         <file>styles.qss</file>
     </qresource>
 </RCC>

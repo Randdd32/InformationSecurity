@@ -31,7 +31,6 @@ void UserListWindow::setupUI()
     _searchButton->setStyleSheet("background: transparent; border: none;");
     _searchButton->setIcon(QIcon(":/images/clear.png"));
     _searchButton->setFixedSize(22, 22);
-    _searchButton->setToolTip("Очистить поиск");
 
     QMargins margins = _searchEdit->textMargins();
     _searchEdit->setTextMargins(margins.left(), margins.top(), _searchButton->width(), margins.bottom());
@@ -60,10 +59,16 @@ void UserListWindow::setupUI()
 
     btnLayout->addWidget(_addUserButton);
 
+    QFrame* tableFrame = new QFrame();
+    tableFrame->setObjectName("TableFrame");
+    QVBoxLayout* frameLayout = new QVBoxLayout(tableFrame);
+    frameLayout->setContentsMargins(1, 1, 1, 1);
+    frameLayout->setSpacing(0);
+
     _usersTable = new QTableWidget();
+    _usersTable->setFrameShape(QFrame::NoFrame);
     _usersTable->setColumnCount(Columns::ColumnCount);
     setupTableColumns();
-
     _usersTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     _usersTable->setSelectionMode(QAbstractItemView::SingleSelection);
     _usersTable->setAlternatingRowColors(true);
@@ -71,12 +76,15 @@ void UserListWindow::setupUI()
     _usersTable->horizontalHeader()->setStretchLastSection(true);
     _usersTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     _usersTable->horizontalHeader()->setSectionResizeMode(Columns::Username, QHeaderView::Stretch);
+    _usersTable->horizontalHeader()->setSectionResizeMode(Columns::Restrictions, QHeaderView::ResizeToContents);
 
     connect(_usersTable, &QTableWidget::itemChanged, this, &UserListWindow::onTableItemChanged);
 
+    frameLayout->addWidget(_usersTable);
+
     mainLayout->addWidget(_searchEdit);
     mainLayout->addLayout(btnLayout);
-    mainLayout->addWidget(_usersTable);
+    mainLayout->addWidget(tableFrame);
 }
 
 void UserListWindow::setupTableColumns()

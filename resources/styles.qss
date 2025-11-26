@@ -3,7 +3,7 @@ QMainWindow, QWidget {
     font-family: Georgia, sans-serif, Arial, "Segoe UI";
 }
 
-QPushButton, QLineEdit, QTableWidget {
+QPushButton, QLineEdit {
     border: 1px solid black;
     border-radius: 6px;
 }
@@ -17,13 +17,21 @@ QLineEdit:focus {
     border: 2px solid black;
 }
 
+QFrame#TableFrame {
+    border: 1px solid black;
+    border-radius: 6px;
+    background-color: white;
+}
+
 QTableWidget {
-    gridline-color: #eeeeee;
+    border: none;
+    gridline-color: #a0a0a0;
     font-size: 14px;
 }
 
 QTableWidget::item {
     padding: 5px;
+    border: none;
 }
 
 QTableWidget::item:selected {
@@ -36,7 +44,12 @@ QHeaderView::section {
     padding: 6px;
     border: none;
     border-bottom: 2px solid black;
+    border-right: 1px solid black;
     font-weight: bold;
+}
+
+QHeaderView::section:last {
+    border-right: none;
 }
 
 QLabel#HeaderLabel {

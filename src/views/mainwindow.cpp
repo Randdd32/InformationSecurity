@@ -17,7 +17,7 @@ MainWindow::MainWindow(QSharedPointer<AuthService> authService,
 {
     setupUI();
     setWindowTitle("Программа  разграничения полномочий пользователей");
-    setMinimumSize(400, 200);
+    setMinimumSize(450, 400);
 
     connect(this, &MainWindow::requestLogout, qApp, &QApplication::quit);
     showLoginScreen();
@@ -38,35 +38,39 @@ void MainWindow::setupUI()
     _userLabel = new QLabel("Имя пользователя:");
     _userLabel->setObjectName("FieldLabel");
 
-    _changePassButton = new QPushButton("Изменить пароль");
-    _changePassButton->setMinimumHeight(50);
-    _changePassButton->setCursor(Qt::PointingHandCursor);
-    connect(_changePassButton, &QPushButton::clicked, this, &MainWindow::openChangePasswordDialog);
+    _actionList = new QListWidget(this);
+    _actionList->setIconSize(QSize(32, 32));
+    _actionList->setSpacing(8);
+    _actionList->setSelectionMode(QAbstractItemView::NoSelection);
+    _actionList->setFocusPolicy(Qt::NoFocus);
+    _actionList->setStyleSheet(
+        "QListWidget { "
+        "  font-size: 18px;"
+        "  padding-top: 5px;"
+        "  padding-bottom: 5px;"
+        "} "
+        "QListWidget::item { padding: 12px; } "
+        "QListWidget::item:hover { background: #e6e6e6; } "
+        );
+    mainLayout->addWidget(_actionList);
 
-    _userListButton = new QPushButton("Управление пользователями");
-    _userListButton->setMinimumHeight(50);
-    _userListButton->setMaximumWidth(200);
-    _userListButton->setCursor(Qt::PointingHandCursor);
-    connect(_userListButton, &QPushButton::clicked, this, &MainWindow::openUserListWindow);
+    connect(_actionList, &QListWidget::itemClicked, this,
+            [&](QListWidgetItem* item) {
+                if (item->text() == "Изменить пароль")
+                    openChangePasswordDialog();
 
-    _logoutButton = new QPushButton("Выйти из системы");
-    _logoutButton->setObjectName("CancelButton");
-    _logoutButton->setMinimumHeight(40);
-    _logoutButton->setMaximumWidth(250);
-    _logoutButton->setCursor(Qt::PointingHandCursor);
-    connect(_logoutButton, &QPushButton::clicked, this, &MainWindow::logout);
+                else if (item->text() == "Управление пользователями")
+                    openUserListWindow();
 
-    _buttonGrid = new QGridLayout();
-    _buttonGrid->setHorizontalSpacing(30);
-    _buttonGrid->setVerticalSpacing(20);
+                else if (item->text() == "Выйти из системы")
+                    logout();
+    });
 
     mainLayout->addWidget(_statusLabel, 0, Qt::AlignCenter);
     mainLayout->addSpacing(10);
     mainLayout->addWidget(_userLabel, 0, Qt::AlignCenter);
-    mainLayout->addSpacing(30);
-    mainLayout->addLayout(_buttonGrid);
-    mainLayout->addStretch();
-    mainLayout->addWidget(_logoutButton, 0, Qt::AlignCenter);
+    mainLayout->addSpacing(25);
+    mainLayout->addWidget(_actionList);
 
     _centerWidget->setVisible(false);
 }
@@ -108,20 +112,27 @@ void MainWindow::updateInterfaceForUser(const UserAccount& user)
     _statusLabel->setText(QString("Режим работы: %1").arg(mode));
     _userLabel->setText(QString("Имя пользователя: %1").arg(user.username()));
 
-    QLayoutItem *item;
-    while ((item = _buttonGrid->takeAt(0)) != nullptr) {
-        delete item->widget();
-        delete item;
-    }
+    _actionList->clear();
+
+    QListWidgetItem* changePassItem = new QListWidgetItem(
+        QIcon(":/images/pass.png"),
+        "Изменить пароль"
+        );
+    _actionList->addItem(changePassItem);
 
     if (user.isAdmin()) {
-        _buttonGrid->addWidget(_changePassButton, 0, 0, 1, 1);
-        _buttonGrid->addWidget(_userListButton, 0, 1, 1, 1);
-        _changePassButton->setMaximumWidth(200);
-    } else {
-        _buttonGrid->addWidget(_changePassButton, 0, 0, 1, 2);
-        _changePassButton->setMinimumWidth(0);
+        QListWidgetItem* userItem = new QListWidgetItem(
+            QIcon(":/images/users.png"),
+            "Управление пользователями"
+            );
+        _actionList->addItem(userItem);
     }
+
+    QListWidgetItem* logoutItem = new QListWidgetItem(
+        QIcon(":/images/exit.png"),
+        "Выйти из системы"
+        );
+    _actionList->addItem(logoutItem);
 
     _centerWidget->setVisible(true);
 }
