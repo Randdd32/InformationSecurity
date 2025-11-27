@@ -3,15 +3,26 @@
 #include "headers/utils/exceptions.h"
 
 #include <QFile>
+#include <QDir>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QStandardPaths>
 
 CryptDBService::CryptDBService(QObject *parent)
     : QObject{parent}
 {
+    QString appDataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDir().mkpath(appDataDir);
+    ENCRYPTED_DB_FILE = appDataDir + "/accounts.enc";
+
+    QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    QDir().mkpath(tempDir);
+    TEMP_DB_FILE = tempDir + "/accounts.db.tmp";
+
     _db = QSqlDatabase::addDatabase("QSQLITE");
     _db.setDatabaseName(TEMP_DB_FILE);
+
     _fileHandler = new EncryptedFileHandler(this);
 }
 
