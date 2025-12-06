@@ -24,4 +24,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     .gitignore \
-    README.md
+    README.md \
+    resources/images/exit.png \
+    resources/images/file.png \
+    resources/images/fingerprint.png \
+    resources/images/mw-icon.png \
+    resources/images/save.png \
+    resources/styles.qss
+
+RESOURCES += \
+    resources/resources.qrc

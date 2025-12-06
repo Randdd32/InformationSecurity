@@ -1,0 +1,85 @@
+QMainWindow, QWidget {
+	background-color: white;
+	font-family: Georgia, sans-serif, Arial, "Segoe UI";
+}
+
+QLabel#HeaderLabel {
+	font-size: 18px;
+	font-weight: bold;
+	color: black;
+	margin-bottom: 5px;
+}
+
+QLabel#FieldLabel {
+	font-size: 14px;
+	color: #333333;
+}
+
+QPushButton {
+	font-size: 16px;
+	font-weight: bold;
+	background-color: black;
+	color: white;
+	padding: 5px;
+	border-radius: 6px;
+}
+
+QPushButton:hover {
+	background-color: #333333;
+}
+
+QListWidget {
+	border: 1px solid black;
+	border-radius: 6px;
+	font-size: 18px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+QListWidget::item {
+	padding: 12px;
+}
+
+QListWidget::item:hover {
+	background: #e6e6e6;
+	color: black;
+}
+
+QMenuBar {
+	background-color: white;
+	border-bottom: 1px solid black;
+	font-size: 14px;
+}
+
+QMenuBar::item {
+	padding: 5px 10px;
+	background: transparent;
+}
+
+QMenuBar::item:selected {
+	background: #e6e6e6;
+	color: black;
+}
+
+QMenu {
+	background-color: white;
+	border: 1px solid black;
+	font-size: 14px;
+}
+
+QMenu::item {
+	padding: 5px 20px;
+}
+
+QMenu::item:selected {
+	background-color: black;
+	color: white;
+}
+
+QMessageBox {
+	background-color: white;
+}
+
+QMessageBox QPushButton {
+	min-width: 80px;
+}
