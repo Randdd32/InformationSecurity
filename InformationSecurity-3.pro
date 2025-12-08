@@ -9,10 +9,12 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/magma/magmacipher.cpp \
     src/main.cpp \
     src/views/mainwindow.cpp
 
 HEADERS += \
+    headers/magma/magmacipher.h \
     headers/views/mainwindow.h \
 
 # Default rules for deployment.
@@ -28,4 +30,4 @@ DISTFILES += \
     resources/styles.qss
 
 RESOURCES += \
-    resources/resources.qrc
+    resources/resources.qrc \
