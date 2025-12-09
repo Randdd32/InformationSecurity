@@ -8,7 +8,7 @@ class MagmaCipher
 public:
     MagmaCipher();
 
-    void setKey(const QByteArray &key);
+    bool setKey(const QByteArray &key);
 
     QByteArray processCTR(const QByteArray &data, const QByteArray &iv);
 

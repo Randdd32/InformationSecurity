@@ -1,6 +1,7 @@
 #include "headers/magma/magmacipher.h"
 
 #include <QtEndian>
+#include <QDebug>
 
 const quint8 MagmaCipher::Pi[8][16] = {
     {1, 7, 14, 13, 0, 5, 8, 3, 4, 15, 10, 6, 9, 12, 11, 2},
@@ -20,13 +21,14 @@ MagmaCipher::MagmaCipher()
     }
 }
 
-void MagmaCipher::setKey(const QByteArray &key)
+bool MagmaCipher::setKey(const QByteArray &key)
 {
     if (key.size() != 32) {
-
-        return;
+        qDebug() << "Magma key must be 32 bytes (256 bits). Received: " << key.size() << " bytes.";
+        return false;
     }
     expandKey(key);
+    return true;
 }
 
 void MagmaCipher::expandKey(const QByteArray &key)

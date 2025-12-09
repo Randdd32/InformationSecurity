@@ -11,11 +11,15 @@ CONFIG += c++17
 SOURCES += \
     src/magma/magmacipher.cpp \
     src/main.cpp \
-    src/views/mainwindow.cpp
+    src/utils/cryptoutils.cpp \
+    src/views/mainwindow.cpp \
+    src/views/passworddialog.cpp
 
 HEADERS += \
     headers/magma/magmacipher.h \
+    headers/utils/cryptoutils.h \
     headers/views/mainwindow.h \
+    headers/views/passworddialog.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -25,8 +29,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     .gitignore \
     README.md \
+    resources/images/decrypt.png \
+    resources/images/encrypt.png \
     resources/images/exit.png \
+    resources/images/folder.png \
     resources/images/mw-icon.png \
+    resources/images/save.png \
     resources/styles.qss
 
 RESOURCES += \
